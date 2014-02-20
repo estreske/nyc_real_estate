@@ -3,10 +3,46 @@
 <head>
 	<title>nyc_real_estate</title>
 	<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
-	<script src='/javascripts/jquery.js'></script>
-	<script src='/javascripts/d3.js'></script>
-	<script src='/javascripts/app.js'></script>
+	<script src='javascripts/jquery.js'></script>
+	<script src='javascripts/d3.js'></script>
+	<script src='javascripts/app.js'></script>
 </head>
 <body>
+  <p>Year:</p>
+  <select name="year" id="year">
+    <option>2003</option>
+    <option>2004</option>
+    <option>2005</option>
+    <option>2006</option>
+    <option>2007</option>
+    <option>2008</option>
+
+  </select>
+  <p>Quarter:</p>
+  <select name="quarter" id="quarter">
+    <option>Q1</option>
+    <option>Q2</option>
+    <option>Q3</option>
+    <option>Q4</option>
+  </select>
+  <p>Percentile:</p>
+  <select name="percentile" id="percentile">
+    <option>30</option>
+    <option>60</option>
+    <option>90</option>
+  </select>
+  <p>Building Type:</p>
+  <select name="building_type" id="building_type">
+    <option value="1">House</option>
+    <option value="3">Condo</option>
+    <option value="4">Co-op</option>
+    <option value="5">Commercial</option>
+    <option value="13">Single-Family Townhouse</option>
+    <option value="14">Multi-Family Townhouse</option>
+  </select>
+  
+  <svg>
+    
+  </svg>
 </body>
 </html>
