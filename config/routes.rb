@@ -4,4 +4,6 @@ NycRealEstate::Application.routes.draw do
   get '/counts' => 'home#counts'
 
   get '/prices' => 'home#prices'
+
+  get '/clear' => 'home#clear'
 end

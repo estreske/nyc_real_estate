@@ -2,6 +2,17 @@ d3.select('svg').attr("height", "100%")
 d3.select('svg').attr("width", "100%")
 var API_data = []
 var x = -200
+
+function clearCSV(){
+  $.ajax({
+    url: '/clear',
+    dataType: "json",
+    method: "get",
+    success: function(data){
+      console.log("Cleared CSV")
+    }
+  })
+}
 function ajaxCounts(year, q, percentile, type, borough){
   var params = {
     year: year,
@@ -61,6 +72,7 @@ function getCounts(){
   $('#submit').on("click", function(e){
     console.log('clicked')
     e.preventDefault();
+    clearCSV();
     var year = $('#year').val()
     var q = $('#quarter').val()
     var percentile = $('#percentile').val()
@@ -91,16 +103,10 @@ function getCounts(){
       getData(year, q, percentile, type, "Staten%20Island")
     }, 6000);
     setTimeout(function(){
-      project(API_data)
+      // project(API_data)
     }, 7500)
 
-    
-    // setTimeout(getData(year, q, percentile, type, "Bronx"), 4500)
-    // project(API_data.splice(0,2))
-    // setTimeout(getData(year, q, percentile, type, "Brooklyn"), 6000)
-    // project(API_data.splice(0,2))
-    // setTimeout(getData(year, q, percentile, type, "Staten%20Island"), 7500)
-    // project(API_data.splice(0,2))
+    setTimeout(function(){location.reload()}, 8000)
   })
 }
 
@@ -128,6 +134,7 @@ function project(data){
 
 
 $(function(){
+  clearCSV();
   getCounts();
   // ajaxPrices(2008, "Q4", 60, 3, "Queens");
   // project(data);
