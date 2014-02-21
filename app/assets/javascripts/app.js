@@ -1,20 +1,69 @@
 d3.select('svg').attr("height", "100%")
 d3.select('svg').attr("width", "100%")
 
-function getCounts(year, q, percentile, type, borough){
+function ajaxCounts(year, q, percentile, type, borough){
   console.log("function ran")
+  var params = {
+    year: year,
+    q: q,
+    percentile: percentile,
+    type: type,
+    borough: borough
+  }
   $.ajax({
-    url: "http://api.nytimes.com/svc/real-estate/v2/sales/count.json?geo-extent-level=borough&geo-extent-value=" + borough + "&geo-summary-level=borough&date-range=" + year + "-" + q + "&building-type-id=" + type + "&api-key=1EC54803D22BA64ED89B4EC094FC5DDE:10:68849599",
-
+    url: '/counts',
     dataType: "json",
     method: "get",
+    data: params,
     success: function(data){
       console.log(data)
-      project(data)
+      // project(data)
+    }
+  })
+}
+function ajaxPrices(year, q, percentile, type, borough){
+  console.log("function ajax ran")
+  var params = {
+    year: year,
+    q: q,
+    percentile: percentile,
+    type: type,
+    borough: borough
+  }
+
+  $.ajax({
+    url: '/prices',
+    dataType: "json",
+    method: "GET",
+    data: params,
+    error: function(e){
+      console.log("ERROR", e)
+      
+    },
+    success: function(data){
+      console.log(data)
+      // project(data)
     }
   })
 }
 
+
+function getCounts(){
+
+  $('#submit').on("click", function(e){
+    console.log('clicked')
+    e.preventDefault();
+    var year = $('#year').val()
+    var q = $('#quarter').val()
+    var percentile = $('#percentile').val()
+    var type = $('#building_type').val()
+    setTimeout(ajaxCounts(year, q, percentile, type, "Manhattan"), 1500);
+    setTimeout(ajaxCounts(year, q, percentile, type, "Queens"), 3000)
+    setTimeout(ajaxCounts(year, q, percentile, type, "Bronx"), 4500)
+    setTimeout(ajaxCounts(year, q, percentile, type, "Brooklyn"), 6000)
+    setTimeout(ajaxCounts(year, q, percentile, type, "Staten%20Island"), 7500)
+  })
+}
 function project(data){
   var projection = d3.select('svg').selectAll('rect').data(data)
 
@@ -32,18 +81,8 @@ function project(data){
 }
 
 
-
-
-
-
-
-
 $(function(){
-
-  $('#submit').on("click", function(e){
-    console.log('clicked')
-    e.preventDefault();
-    getCounts(2008, "Q4", 90, 1, "Manhattan");
-  })
+  // getCounts();
+  ajaxPrices(2008, "Q4", 60, 3, "Queens");
   // project(data);
 })
