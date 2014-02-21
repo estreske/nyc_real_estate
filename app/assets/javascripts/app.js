@@ -1,6 +1,7 @@
 d3.select('svg').attr("height", "100%")
 d3.select('svg').attr("width", "100%")
 var API_data = []
+var x = -200
 function ajaxCounts(year, q, percentile, type, borough){
   var params = {
     year: year,
@@ -16,7 +17,7 @@ function ajaxCounts(year, q, percentile, type, borough){
     data: params,
     success: function(data){
       console.log("COUNT DATA",data)
-      API_data.push({count: data})
+      API_data.push({count: data, x: x+= 150})
     }
   })
 }
@@ -36,7 +37,6 @@ function ajaxPrices(year, q, percentile, type, borough){
     data: params,
     error: function(e){
       console.log("ERROR", e)
-      
     },
     success: function(data){
       var last = API_data[API_data.length - 1]
@@ -66,11 +66,34 @@ function getCounts(){
     var percentile = $('#percentile').val()
     var type = $('#building_type').val()
     getData(year, q, percentile, type, "Manhattan");
-    setTimeout(function(){project(API_data)}, 1000);
+    // setTimeout(function(){
+    //   project(API_data)
+    // }, 1000)
     setTimeout(function(){
       getData(year, q, percentile, type, "Queens")
+    }, 1500);
+    // setTimeout(function(){
+    //   project(API_data)
+    // }, 4000)
+    setTimeout(function(){
+      getData(year, q, percentile, type, "Bronx")
+    }, 3000);
+    // setTimeout(function(){
+    //   project(API_data)
+    // }, 7000)
+    setTimeout(function(){
+      getData(year, q, percentile, type, "Brooklyn")
+    }, 4500);
+    // setTimeout(function(){
+    //   project(API_data)
+    // }, 10000)
+    setTimeout(function(){
+      getData(year, q, percentile, type, "Staten%20Island")
+    }, 6000);
+    setTimeout(function(){
       project(API_data)
-    }, 1500)
+    }, 7500)
+
     
     // setTimeout(getData(year, q, percentile, type, "Bronx"), 4500)
     // project(API_data.splice(0,2))
@@ -94,10 +117,11 @@ function project(data){
 
   projection
     .attr("y", 20)
-    .attr("x", function(d){return d.count})
-    .attr("height", function(d){ console.log("price", d.price)})
-    .attr("width", function(d){return d.count})
+    .attr("x", function(d) {return d.x})
+    .attr("height", function(d){ return d.price / 1000})
+    .attr("width", "100")
     .attr("fill", "red")
+    .classed({rendered: true})
 
   projection.exit()
 }
