@@ -23,7 +23,7 @@ class HomeController < ApplicationController
     percentile = params[:percentile]
     my_url = "http://api.nytimes.com/svc/real-estate/v2/sales/percentile/"+ percentile + ".json?geo-extent-level=borough&geo-extent-value=" + borough + "&geo-summary-level=borough&date-range=" + year + "-" + q + "&building-type-id=" + type + "&api-key=1EC54803D22BA64ED89B4EC094FC5DDE:10:68849599"
     result = HTTParty.get(my_url)
-    @price = result["results"][0]["sale_price"]
+    @price = result["results"][0]["sale_price"].gsub("$", "").gsub(",","").to_f
     render json: { price: @price }
   end
 end

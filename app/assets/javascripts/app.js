@@ -1,8 +1,7 @@
 d3.select('svg').attr("height", "100%")
 d3.select('svg').attr("width", "100%")
-
+var API_data = []
 function ajaxCounts(year, q, percentile, type, borough){
-  console.log("function ran")
   var params = {
     year: year,
     q: q,
@@ -16,13 +15,12 @@ function ajaxCounts(year, q, percentile, type, borough){
     method: "get",
     data: params,
     success: function(data){
-      console.log(data)
-      // project(data)
+      console.log("COUNT DATA",data)
+      API_data.push({count: data})
     }
   })
 }
 function ajaxPrices(year, q, percentile, type, borough){
-  console.log("function ajax ran")
   var params = {
     year: year,
     q: q,
@@ -41,10 +39,20 @@ function ajaxPrices(year, q, percentile, type, borough){
       
     },
     success: function(data){
-      console.log(data)
-      // project(data)
+      var last = API_data[API_data.length - 1]
+      console.log("AJAX PRICE DATA",data.price)
+      console.log("API OBJECT", last)
+      last.price = data.price
+      
     }
+    
   })
+}
+
+function getData(year, q, percentile, type, borough){
+  ajaxCounts(year, q, percentile, type, borough)
+  ajaxPrices(year, q, percentile, type, borough)
+  return API_data
 }
 
 
@@ -57,14 +65,28 @@ function getCounts(){
     var q = $('#quarter').val()
     var percentile = $('#percentile').val()
     var type = $('#building_type').val()
-    setTimeout(ajaxCounts(year, q, percentile, type, "Manhattan"), 1500);
-    setTimeout(ajaxCounts(year, q, percentile, type, "Queens"), 3000)
-    setTimeout(ajaxCounts(year, q, percentile, type, "Bronx"), 4500)
-    setTimeout(ajaxCounts(year, q, percentile, type, "Brooklyn"), 6000)
-    setTimeout(ajaxCounts(year, q, percentile, type, "Staten%20Island"), 7500)
+    getData(year, q, percentile, type, "Manhattan");
+    setTimeout(function(){project(API_data)}, 1000);
+    setTimeout(function(){
+      getData(year, q, percentile, type, "Queens")
+      project(API_data)
+    }, 1500)
+    
+    // setTimeout(getData(year, q, percentile, type, "Bronx"), 4500)
+    // project(API_data.splice(0,2))
+    // setTimeout(getData(year, q, percentile, type, "Brooklyn"), 6000)
+    // project(API_data.splice(0,2))
+    // setTimeout(getData(year, q, percentile, type, "Staten%20Island"), 7500)
+    // project(API_data.splice(0,2))
   })
 }
+
+var x = 0;
+
+var y = 0;
+
 function project(data){
+  console.log("projecting", data)
   var projection = d3.select('svg').selectAll('rect').data(data)
 
   projection.enter()
@@ -72,9 +94,9 @@ function project(data){
 
   projection
     .attr("y", 20)
-    .attr("x", 20)
-    .attr("height", 30)
-    .attr("width", 30)
+    .attr("x", function(d){return d.count})
+    .attr("height", function(d){ console.log("price", d.price)})
+    .attr("width", function(d){return d.count})
     .attr("fill", "red")
 
   projection.exit()
@@ -82,7 +104,7 @@ function project(data){
 
 
 $(function(){
-  // getCounts();
-  ajaxPrices(2008, "Q4", 60, 3, "Queens");
+  getCounts();
+  // ajaxPrices(2008, "Q4", 60, 3, "Queens");
   // project(data);
 })
