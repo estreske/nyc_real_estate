@@ -15,13 +15,19 @@ form {
   top: 10px;
 }
 
-#svg_graph {
-  display:inline-block;
-  float:right;
+svg {
+  position: relative;
+  top: -605px;
+  left: 365px;
 }
 
 #form {
   display:inline-block;
   position: relative;
-  top: -185px;
+}
+
+#prices {
+  position: relative;
+  top: -270px;
+  left: 629px;
 }

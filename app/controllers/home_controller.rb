@@ -1,8 +1,14 @@
 class HomeController < ApplicationController
 
   def index
-
+    @boroughs = ["Manhattan", "Queens","Bronx","Brooklyn","Staten Island"]
+    @csv_prices = []
+    CSV.foreach("public/data.csv") do |row|
+      value = row.first.scan(/\d/).join
+      @csv_prices << value
+    end
   end
+  
   def clear
     CSV.open("public/data.csv", "wb") do |csv|
       csv << ["prices"]
